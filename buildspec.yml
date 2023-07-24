@@ -5,6 +5,7 @@ env:
     BUCKET_NAME: "bookpython"  # Replace with your bucket name
     APP_ZIP: "bookstore-api.zip"
     CFN_STACK_NAME: "bookstore"
+    CFN_TEMPLATE: "cloudformation.yaml"
 
 phases:
   pre_build:
@@ -15,7 +16,7 @@ phases:
   build:
     commands:
       - echo "Packaging Flask application..."
-      - echo " list contents"
+      - echo "List contents"
       - ls -latr
       - zip -r $APP_ZIP *
 
@@ -24,6 +25,7 @@ phases:
       - echo "Uploading Flask app to S3..."
       - aws s3 cp $APP_ZIP s3://$BUCKET_NAME/
       - echo "Deploying CloudFormation stack..."
+      - aws cloudformation deploy --template-file $CFN_TEMPLATE --stack-name $CFN_STACK_NAME --parameter-overrides S3BucketName=$BUCKET_NAME S3ObjectKey=$APP_ZIP --capabilities CAPABILITY_IAM
 
 artifacts:
   files:
