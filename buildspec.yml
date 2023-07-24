@@ -1,0 +1,14 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo "Setting up build environment..."
+  build:
+    commands:
+      - echo "Build phase..."
+      # Add any commands here if you need to modify files before deploying
+  post_build:
+    commands:
+      - echo "Post build phase..."
+      # Here we will run CloudFormation. This will be added in the next steps.
