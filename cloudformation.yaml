@@ -29,6 +29,35 @@ Resources:
           ToPort: 22
           CidrIp: 0.0.0.0/0
 
+  WebAPIEC2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: S3GetObjectPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                Resource:
+                  - !Sub 'arn:aws:s3:::${S3BucketName}/${S3ObjectKey}'
+
+  WebAPIEC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - Ref: WebAPIEC2Role
+
   WebAPIEC2Instance:
     Type: AWS::EC2::Instance
     Properties:
@@ -37,6 +66,8 @@ Resources:
       KeyName: !Ref KeyPairName
       SecurityGroupIds:
         - !GetAtt WebAPISecurityGroup.GroupId
+      IamInstanceProfile:
+        Ref: WebAPIEC2InstanceProfile
       UserData:
         Fn::Base64:
           !Sub |
