@@ -141,7 +141,7 @@ def remove_book(book):
 # and assign to the static route of ('/')
 @app.route('/')
 def home():
-    return "Welcome to Ramazan's Bookstore API Service"
+    return "Welcome to Bhanu's Bookstore API Service"
 
 # Write a function named `get_books` which returns all books in JSON format for `GET`,
 # and assign to the static route of ('/books')
@@ -194,7 +194,7 @@ def update_book(book_id):
 @app.route('/books/<int:book_id>', methods=['DELETE'])
 def delete_book(book_id):
     book = find_book(book_id)
-    if book == None:
+    if book is None:
         abort(404)
     return jsonify({'result': remove_book(book)})
 
