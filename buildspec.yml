@@ -17,7 +17,7 @@ phases:
       - echo "Packaging Flask application..."
       - echo " list contents"
       - ls -latr
-      - zip -r $APP_ZIP pythonbookstore/*
+      - zip -r $APP_ZIP *
 
   post_build:
     commands:
