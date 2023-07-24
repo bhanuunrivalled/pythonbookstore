@@ -1,15 +1,28 @@
 version: 0.2
 
+env:
+  variables:
+    BUCKET_NAME: "bookpython"  # Replace with your bucket name
+    APP_ZIP: "bookstore-api.zip"
+    CFN_STACK_NAME: "bookstore"
+
 phases:
   pre_build:
     commands:
       - echo "Setting up build environment..."
+      - pip install awscli
+
   build:
     commands:
-      - echo "Build phase..."
-      # Add any commands here if you need to modify files before deploying
+      - echo "Packaging Flask application..."
+      - zip -r $APP_ZIP /*
+
   post_build:
     commands:
+      - echo "Uploading Flask app to S3..."
+      - aws s3 cp $APP_ZIP s3://$BUCKET_NAME/
       - echo "Deploying CloudFormation stack..."
-      - aws cloudformation deploy --template-file cloudformation.yaml --stack-name MyStackName
 
+artifacts:
+  files:
+    - $APP_ZIP
