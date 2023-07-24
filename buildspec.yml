@@ -10,5 +10,6 @@ phases:
       # Add any commands here if you need to modify files before deploying
   post_build:
     commands:
-      - echo "Post build phase..."
-      # Here we will run CloudFormation. This will be added in the next steps.
+      - echo "Deploying CloudFormation stack..."
+      - aws cloudformation deploy --template-file cloudformation.yaml --stack-name MyStackName
+
