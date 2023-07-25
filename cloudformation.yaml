@@ -62,7 +62,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: ami-0716e5989a4e4fa52
-      InstanceType: t2.micro
+      InstanceType: t3.micro
       KeyName: !Ref KeyPairName
       SecurityGroupIds:
         - !GetAtt WebAPISecurityGroup.GroupId
