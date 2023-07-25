@@ -80,9 +80,9 @@ Resources:
             yum install -y python3 python3-pip unzip aws-cli
             aws s3 cp s3://${S3BucketName}/${S3ObjectKey} /home/ec2-user/bookstore-api.zip
             unzip /home/ec2-user/bookstore-api.zip -d /home/ec2-user/
-            cd /home/ec2-user/bookstore-api
+            cd /home/ec2-user
             pip3 install -r requirements.txt
-            nohup python3 app.py > /home/ec2-user/flask_app.log 2>&1 &
+            nohup python3 bookstore-api.py > /home/ec2-user/flask_app.log 2>&1 &
 
 Outputs:
   WebsiteURL:
