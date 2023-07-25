@@ -60,6 +60,28 @@ Resources:
 
   WebAPIEC2Instance:
     Type: AWS::EC2::Instance
+    Metadata:
+      AWS::CloudFormation::Init:
+        config:
+          files:
+            "/home/ec2-user/bookstore-api.zip":
+              source:
+                !Sub "s3://${S3BucketName}/${S3ObjectKey}"
+          commands:
+            01_update:
+              command: "yum update -y"
+            02_install_epel:
+              command: "amazon-linux-extras install -y epel"
+            03_install_packages:
+              command: "yum install -y python3 python3-pip unzip aws-cli"
+            04_unzip_app:
+              command: "unzip /home/ec2-user/bookstore-api.zip -d /home/ec2-user/"
+            05_set_permissions:
+              command: "chown -R ec2-user:ec2-user /home/ec2-user/"
+            06_install_requirements:
+              command: "sudo -u ec2-user pip3 install -r /home/ec2-user/requirements.txt"
+            07_run_app:
+              command: "sudo -u ec2-user nohup python3 /home/ec2-user/bookstore-api.py > /home/ec2-user/flask_app.log 2>&1 &"
     Properties:
       ImageId: ami-0716e5989a4e4fa52
       InstanceType: t3.micro
@@ -75,15 +97,8 @@ Resources:
         Fn::Base64:
           !Sub |
           #!/bin/bash
-          yum update -y
-          amazon-linux-extras install -y epel
-          yum install -y python3 python3-pip unzip aws-cli
-          aws s3 cp s3://${S3BucketName}/${S3ObjectKey} /home/ec2-user/bookstore-api.zip
-          unzip /home/ec2-user/bookstore-api.zip -d /home/ec2-user/
-          chown -R ec2-user:ec2-user /home/ec2-user/
-          cd /home/ec2-user
-          sudo -u ec2-user pip3 install -r requirements.txt
-          sudo -u ec2-user nohup python3 bookstore-api.py > /home/ec2-user/flask_app.log 2>&1 &
+          /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource WebAPIEC2Instance --region ${AWS::Region}
+
 
 Outputs:
   WebsiteURL:
