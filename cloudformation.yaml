@@ -63,11 +63,9 @@ Resources:
     Metadata:
       AWS::CloudFormation::Init:
         config:
-          files:
-            "/home/ec2-user/bookstore-api.zip":
-              source:
-                !Sub "s3://${S3BucketName}/${S3ObjectKey}"
           commands:
+            01_download_app:
+              command: !Sub "aws s3 cp s3://${S3BucketName}/${S3ObjectKey} /home/ec2-user/bookstore-api.zip"
             01_update:
               command: "yum update -y"
             02_install_epel:
