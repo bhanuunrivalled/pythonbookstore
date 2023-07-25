@@ -79,7 +79,7 @@ Resources:
             06_set_permissions:
               command: "chmod +x /home/ec2-user/bookstore-api.py"
             07_run_app:
-              command: "sudo -u ec2-user nohup /home/ec2-user/bookstore-api.py > /home/ec2-user/flask_app.log 2>&1 &"
+              command: "sudo -u ec2-user nohup python3 /home/ec2-user/bookstore-api.py > /home/ec2-user/flask_app.log 2>&1 &"
 
     Properties:
       ImageId: ami-0716e5989a4e4fa52
