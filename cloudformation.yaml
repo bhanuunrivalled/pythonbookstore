@@ -68,8 +68,6 @@ Resources:
               command: !Sub "aws s3 cp s3://${S3BucketName}/${S3ObjectKey} /home/ec2-user/bookstore-api.zip"
             01_update:
               command: "yum update -y"
-            02_install_epel:
-              command: "amazon-linux-extras install -y epel"
             03_install_packages:
               command: "yum install -y python3 python3-pip unzip aws-cli"
             04_unzip_app:
